@@ -1,48 +1,87 @@
-import React , {useState, useEffect} from 'react';
+ import React , {useState, useEffect} from 'react';
  import {QuestionAPI}  from './components';
+ //import logo from './images/congrats-pic.jpeg';
 
 
-const API_URL = 'https://opentdb.com/api.php?amount=10&category=22&difficulty=medium&type=multiple'; 
+const API_URL = 'https://opentdb.com/api.php?amount=10&category=18&difficulty=easy&type=multiple'; 
 function App() {
 
 const [questions, setQuestions] = useState([]);
+const [currentIndex, setCurrentIndex ] = useState(0);
+const [score, setScore] = useState(0);
+const [questionsover, setQuestionsOver] = useState(false);
+const [showAnswers, setShowAnswers] = useState(false);
 
 useEffect( ()=> {
 fetch(API_URL)
 .then((res) => res.json())
 .then( (data)=>{
-  setQuestions(data.results);
+  const questions = data.results.map((question) =>
+  ({
+  ...question,
+  answers:[question.correct_answer,...question.incorrect_answers].sort(()=>
+    Math.random()-0.5),
+  }));
+ setQuestions(questions);
 });
 }, []); 
 
 
 const handleAnswer = (clickedAnswer) => {
+  
+ 
+if(!showAnswers){
+  if(clickedAnswer=== questions[currentIndex].correct_answer)
+  {
+    //increase the score by one.
+    setScore(score+1);
+  }
+}
+
+  setShowAnswers(true);
+  
   // here we will check for the answer
   
-
-
+//  if correct show next ques.
+// change the score
 };
+const handleNextQuestion = () => {
+   
+  setShowAnswers(false);
+  
+   let setIndex= currentIndex +1;
+   
+   setCurrentIndex(setIndex);
+   
+   if(setIndex >= questions.length){
+      setQuestionsOver(true);
+    }
+
+}
 
 
-  return  questions.length > 0 ? (
+  return questionsover ? (
+     <div> 
+       <div className= 'bg-fff text-3xl text-black-500'>     
+       <h1 className="text-red-500 text-5xl mb-5">Congratulations..!!</h1>
+       Quiz Over ... Your Score is : <span className="text-black">{score}</span>  
+       </div>   
+       </div>
+  ) : (questions.length > 0 ? (
     
-    <div  className="container">
-        {/* <div className='bg-white text-pink-800 p-8 rounded-lg shadow-md'>
-        <h2 className="text-3xl"> {questions[0].question} </h2>
+     <div  className="container">
+       
+           <QuestionAPI data= {questions[currentIndex]}
+           handleAnswer={handleAnswer}
+           handleNextQuestion ={ handleNextQuestion}
+           showAnswers = {showAnswers} />
+           
+  
       </div>
-      <div className=' flex flex-wrap justify-around  mt-6'>
-        <button className="bg-white w-5/12 p-4  text-pink-500 font-semibold rounded shadow"> {questions[0].correct_answer}</button>
-        <button className="bg-white p-4 w-5/12 text-pink-500 font-semibold rounded shadow"> {questions[0].incorrect_answers[0]} </button>
-        <button className="bg-white p-4 w-5/12 text-pink-500 font-semibold mt-3 rounded shadow"> {questions[0].incorrect_answers[1]}</button>
-        <button className="bg-white p-4 w-5/12 text-pink-500 font-semibold mt-3 rounded shadow"> {questions[0].incorrect_answers[2]}</button>
-
-      </div> */}
-    <QuestionAPI data={questions[0]} />
-   </div>
-  )
+   )
     : (
         <h3 className="text-white text-2xl">Loading...</h3>
-      );
+      ));
     
       }
 export default App;
