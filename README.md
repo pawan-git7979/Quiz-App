@@ -25,4 +25,6 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.<br />
 Your app is ready to be deployed!
 
+- IF u are feeling any problem in understanding the codebase or issue related to deploying , then feel free to ask at https://www.linkedin.com/in/pawan-agrawal-316a16190/
+
 - IF u have like this quiz app , please give a **star** to the repository , it meant a lot to me , and i am working on adding more features to this repository.
