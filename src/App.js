@@ -70,7 +70,15 @@ const handleNextQuestion = () => {
   ) : (questions.length > 0 ? (
     
      <div  className="container">
-       
+           <div className=" bg-gray  text-2xl mb-10 text-center">
+
+           <h1 className="p-3"> Question {currentIndex +1} of 10  </h1>
+           <hr></hr>
+
+
+
+           </div>
+
            <QuestionAPI data= {questions[currentIndex]}
            handleAnswer={handleAnswer}
            handleNextQuestion ={ handleNextQuestion}
